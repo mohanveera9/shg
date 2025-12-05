@@ -1,0 +1,88 @@
+{
+  "app_name": "SHG నిర్వహణ",
+  "welcome": "స్వాగతం",
+  "continue": "కొనసాగించు",
+  "skip": "దాటవేయి",
+  "cancel": "రద్దు చేయి",
+  "save": "సేవ్ చేయి",
+  "submit": "సమర్పించు",
+  "yes": "అవును",
+  "no": "కాదు",
+  
+  "language_selection": "భాష ఎంచుకోండి",
+  "language_selection_subtitle": "మీకు నచ్చిన భాషను ఎంచుకోండి",
+  
+  "permissions_title": "అనుమతులు",
+  "camera_permission": "కెమెరా",
+  "storage_permission": "నిల్వ",
+  "data_sharing_consent": "పరిశోధన కోసం డేటా షేర్ చేయడానికి నేను అంగీకరిస్తున్నాను",
+  
+  "phone_input_title": "ఫోన్ నంబర్ నమోదు చేయండి",
+  "phone_input_hint": "10-అంకెల మొబైల్ నంబర్",
+  "send_otp": "OTP పంపించు",
+  
+  "otp_verification_title": "OTP ధృవీకరించండి",
+  "otp_verification_subtitle": "పంపిన 6-అంకెల కోడ్ నమోదు చేయండి",
+  "verify": "ధృవీకరించు",
+  "resend_otp": "OTP మళ్ళీ పంపించు",
+  
+  "group_selection_title": "గ్రూప్ ఎంచుకోండి",
+  "create_group": "క్రొత్త గ్రూప్ సృష్టించండి",
+  "join_group": "గ్రూప్‌లో చేరండి",
+  
+  "group_name": "గ్రూప్ పేరు",
+  "village": "గ్రామం",
+  "block": "బ్లాక్",
+  "district": "జిల్లా",
+  "group_code": "గ్రూప్ కోడ్",
+  "scan_qr": "QR కోడ్ స్కాన్ చేయండి",
+  
+  "dashboard": "డాష్‌బోర్డ్",
+  "cash_in_hand": "చేతిలో నగదు",
+  "group_savings": "గ్రూప్ పొదుపు",
+  "due_loans": "బకాయి రుణాలు",
+  "top_product": "టాప్ ఉత్పత్తి",
+  
+  "bookkeeping": "లెక్కల పుస్తకం",
+  "add_transaction": "లావాదేవీ జోడించండి",
+  "income": "ఆదాయం",
+  "expense": "ఖర్చు",
+  "savings": "పొదుపు",
+  "amount": "మొత్తం",
+  "date": "తేదీ",
+  "category": "వర్గం",
+  "notes": "గమనికలు",
+  
+  "loans": "రుణాలు",
+  "request_loan": "రుణం అభ్యర్థించండి",
+  "my_loans": "నా రుణాలు",
+  "approve_loan": "రుణం ఆమోదించండి",
+  "disburse_loan": "రుణం పంపిణీ చేయండి",
+  "repay_loan": "రుణం తిరిగి చెల్లించండి",
+  "loan_amount": "రుణ మొత్తం",
+  "purpose": "ప్రయోజనం",
+  "tenure": "కాలవ్యవధి (నెలలు)",
+  "interest_rate": "వడ్డీ రేటు",
+  "emi": "EMI",
+  
+  "products": "ఉత్పత్తులు",
+  "add_product": "ఉత్పత్తి జోడించండి",
+  "product_name": "ఉత్పత్తి పేరు",
+  "description": "వివరణ",
+  "price": "ధర",
+  "stock": "స్టాక్",
+  "photo": "ఫోటో",
+  
+  "orders": "ఆర్డర్లు",
+  "place_order": "ఆర్డర్ చేయండి",
+  "quantity": "పరిమాణం",
+  "order_status": "ఆర్డర్ స్థితి",
+  
+  "reports": "నివేదికలు",
+  "export_csv": "CSV ఎగుమతి",
+  "export_pdf": "PDF ఎగుమతి",
+  
+  "profile": "ప్రొఫైల్",
+  "settings": "సెట్టింగులు",
+  "logout": "లాగ్అవుట్"
+}

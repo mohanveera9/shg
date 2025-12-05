@@ -1,0 +1,41 @@
+# Node.js
+server/node_modules/
+server/.env
+server/uploads/*
+!server/uploads/.gitkeep
+*.log
+npm-debug.log*
+
+# Flutter
+shg_app/.dart_tool/
+shg_app/.flutter-plugins
+shg_app/.flutter-plugins-dependencies
+shg_app/.packages
+shg_app/.pub-cache/
+shg_app/.pub/
+shg_app/build/
+shg_app/.idea/
+shg_app/*.iml
+
+# Android
+shg_app/android/.gradle/
+shg_app/android/captures/
+shg_app/android/local.properties
+shg_app/android/.idea/
+shg_app/android/*.iml
+
+# iOS
+shg_app/ios/Pods/
+shg_app/ios/.symlinks/
+shg_app/ios/Flutter/Flutter.framework
+shg_app/ios/Flutter/Flutter.podspec
+shg_app/ios/.generated/
+
+# Miscellaneous
+*.class
+*.lock
+*.swp
+.DS_Store
+.atom/
+.vscode/
+*.code-workspace

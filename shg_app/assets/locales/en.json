@@ -1,0 +1,88 @@
+{
+  "app_name": "SHG Management",
+  "welcome": "Welcome",
+  "continue": "Continue",
+  "skip": "Skip",
+  "cancel": "Cancel",
+  "save": "Save",
+  "submit": "Submit",
+  "yes": "Yes",
+  "no": "No",
+  
+  "language_selection": "Select Language",
+  "language_selection_subtitle": "Choose your preferred language",
+  
+  "permissions_title": "Permissions",
+  "camera_permission": "Camera",
+  "storage_permission": "Storage",
+  "data_sharing_consent": "I agree to share data for research purposes",
+  
+  "phone_input_title": "Enter Phone Number",
+  "phone_input_hint": "10-digit mobile number",
+  "send_otp": "Send OTP",
+  
+  "otp_verification_title": "Verify OTP",
+  "otp_verification_subtitle": "Enter the 6-digit code sent to",
+  "verify": "Verify",
+  "resend_otp": "Resend OTP",
+  
+  "group_selection_title": "Select Group",
+  "create_group": "Create New Group",
+  "join_group": "Join Existing Group",
+  
+  "group_name": "Group Name",
+  "village": "Village",
+  "block": "Block",
+  "district": "District",
+  "group_code": "Group Code",
+  "scan_qr": "Scan QR Code",
+  
+  "dashboard": "Dashboard",
+  "cash_in_hand": "Cash in Hand",
+  "group_savings": "Group Savings",
+  "due_loans": "Due Loans",
+  "top_product": "Top Product",
+  
+  "bookkeeping": "Bookkeeping",
+  "add_transaction": "Add Transaction",
+  "income": "Income",
+  "expense": "Expense",
+  "savings": "Savings",
+  "amount": "Amount",
+  "date": "Date",
+  "category": "Category",
+  "notes": "Notes",
+  
+  "loans": "Loans",
+  "request_loan": "Request Loan",
+  "my_loans": "My Loans",
+  "approve_loan": "Approve Loan",
+  "disburse_loan": "Disburse Loan",
+  "repay_loan": "Repay Loan",
+  "loan_amount": "Loan Amount",
+  "purpose": "Purpose",
+  "tenure": "Tenure (Months)",
+  "interest_rate": "Interest Rate",
+  "emi": "EMI",
+  
+  "products": "Products",
+  "add_product": "Add Product",
+  "product_name": "Product Name",
+  "description": "Description",
+  "price": "Price",
+  "stock": "Stock",
+  "photo": "Photo",
+  
+  "orders": "Orders",
+  "place_order": "Place Order",
+  "quantity": "Quantity",
+  "order_status": "Order Status",
+  
+  "reports": "Reports",
+  "export_csv": "Export CSV",
+  "export_pdf": "Export PDF",
+  
+  "profile": "Profile",
+  "settings": "Settings",
+  "logout": "Logout"
+}
