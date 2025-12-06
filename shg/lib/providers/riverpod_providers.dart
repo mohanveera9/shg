@@ -165,19 +165,21 @@ class GroupNotifier extends StateNotifier<GroupState> {
     state = state.copyWith(currentGroup: group);
   }
 
-  Future<bool> createGroup(Map<String, dynamic> data) async {
+  Future<Group?> createGroup(Map<String, dynamic> data) async {
     state = state.copyWith(isLoading: true);
     final response = await apiService.post('/groups/create', data, needsAuth: true);
     
-    if (response['success'] == true) {
+    if (response['success'] == true && response['group'] != null) {
+      final createdGroup = Group.fromJson(response['group']);
       await fetchUserGroups();
-      return true;
+      state = state.copyWith(isLoading: false);
+      return createdGroup;
     } else {
       state = state.copyWith(
         isLoading: false,
         errorMessage: response['message'],
       );
-      return false;
+      return null;
     }
   }
 

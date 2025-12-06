@@ -8,6 +8,7 @@ import '../screens/home/home_dashboard_screen.dart';
 import '../screens/home/group_selection_screen.dart';
 import '../screens/home/create_group_screen.dart';
 import '../screens/home/join_group_screen.dart';
+import '../screens/home/group_created_screen.dart';
 import '../screens/bookkeeping/transactions_list_screen.dart';
 import '../screens/bookkeeping/add_transaction_screen.dart';
 import '../screens/loans/loans_dashboard_screen.dart';
@@ -41,6 +42,7 @@ class AppRoutes {
   static const String groupSelection = '/group-selection';
   static const String createGroup = '/create-group';
   static const String joinGroup = '/join-group';
+  static const String groupCreated = '/group-created';
   static const String home = '/home';
   
   static const String transactionsList = '/transactions';
@@ -113,6 +115,11 @@ class AppRoutes {
   // For routes that need arguments, use onGenerateRoute instead
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case groupCreated:
+        final group = settings.arguments as dynamic;
+        return MaterialPageRoute(
+          builder: (context) => GroupCreatedScreen(group: group),
+        );
       case approveLoan:
         final loanId = settings.arguments as String;
         return MaterialPageRoute(

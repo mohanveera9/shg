@@ -1,5 +1,5 @@
 class AppConfig {
-  static const String apiBaseUrl = 'https://shg-server.onrender.com/api';
+  static const String apiBaseUrl = 'http://localhost:3000/api';
   static const String defaultLanguage = 'te';
   static const String appName = 'SHG Management';
   static const String appVersion = '1.0.0';
