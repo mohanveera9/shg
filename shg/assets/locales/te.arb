@@ -2,7 +2,7 @@
   "@@locale": "te",
   "app_name": "SHG నిర్వహణ",
   "welcome": "స్వాగతం",
-  "continue": "కొనసాగించు",
+  "continueButton": "కొనసాగించు",
   "skip": "దాటవేయి",
   "cancel": "రద్దు చేయి",
   "save": "సేవ్ చేయి",

@@ -2,7 +2,7 @@
   "@@locale": "en",
   "app_name": "SHG Management",
   "welcome": "Welcome",
-  "continue": "Continue",
+  "continueButton": "Continue",
   "skip": "Skip",
   "cancel": "Cancel",
   "save": "Save",

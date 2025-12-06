@@ -91,19 +91,12 @@ class AppRoutes {
       loansDashboard: (context) => const LoansDashboardScreen(),
       requestLoan: (context) => const RequestLoanScreen(),
       pendingApprovals: (context) => const PendingApprovalsScreen(),
-      approveLoan: (context) => const ApproveLoanScreen(),
-      disburseLoan: (context) => const DisburseLoanScreen(),
       myLoans: (context) => const MyLoansScreen(),
-      loanDetail: (context) => const LoanDetailScreen(),
-      repayEmi: (context) => const RepayEmiScreen(),
       
       productsList: (context) => const ProductsListScreen(),
-      addProduct: (context) => const AddEditProductScreen(),
-      editProduct: (context) => const AddEditProductScreen(isEdit: true),
-      productDetail: (context) => const ProductDetailScreen(),
+      addProduct: (context) => const AddEditProductScreen(isEdit: false),
       
       ordersList: (context) => const OrdersListScreen(),
-      orderDetail: (context) => const OrderDetailScreen(),
       
       reportsDashboard: (context) => const ReportsDashboardScreen(),
       incomeExpenseChart: (context) => const IncomeExpenseChartScreen(),
@@ -115,5 +108,48 @@ class AppRoutes {
       editProfile: (context) => const EditProfileScreen(),
       settings: (context) => const SettingsScreen(),
     };
+  }
+  
+  // For routes that need arguments, use onGenerateRoute instead
+  static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case approveLoan:
+        final loanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => ApproveLoanScreen(loanId: loanId),
+        );
+      case disburseLoan:
+        final loanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => DisburseLoanScreen(loanId: loanId),
+        );
+      case loanDetail:
+        final loanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => LoanDetailScreen(loanId: loanId),
+        );
+      case repayEmi:
+        final loanId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => RepayEmiScreen(loanId: loanId),
+        );
+      case editProduct:
+        final productId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => AddEditProductScreen(isEdit: true, productId: productId),
+        );
+      case productDetail:
+        final productId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => ProductDetailScreen(productId: productId),
+        );
+      case orderDetail:
+        final orderId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => OrderDetailScreen(orderId: orderId),
+        );
+      default:
+        return null;
+    }
   }
 }

@@ -92,7 +92,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   readOnly: true,
-                  initialValue: user.phone,
+                  controller: TextEditingController(text: user.phone),
                   decoration: InputDecoration(
                     labelText: 'Phone Number',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
@@ -102,7 +102,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 const SizedBox(height: 16),
                 TextField(
                   readOnly: true,
-                  initialValue: user.role,
+                  controller: TextEditingController(text: user.role),
                   decoration: InputDecoration(
                     labelText: 'Role',
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),

@@ -25,7 +25,7 @@ class OrdersListScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.package, size: 64, color: Colors.grey[400]),
+                        Icon(Icons.abc, size: 64, color: Colors.grey[400]),
                         const SizedBox(height: 16),
                         Text(
                           'No Orders Yet',

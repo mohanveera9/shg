@@ -22,9 +22,7 @@ class TransactionsTable extends Table {
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
 
-@DriftDatabase(tables: [
-  TransactionsTable,
-])
+@DriftDatabase(tables: [TransactionsTable])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

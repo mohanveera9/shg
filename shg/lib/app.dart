@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shg_app/l10n/app_localizations.dart';
 import 'config/app_theme.dart';
 import 'config/routes.dart';
 import 'providers/riverpod_providers.dart';
@@ -12,7 +12,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final language = ref.watch(languageProvider);
-    
+
     return MaterialApp(
       title: 'SHG Management',
       theme: AppTheme.lightTheme,
@@ -22,7 +22,8 @@ class MyApp extends ConsumerWidget {
         Locale('en'),
         Locale('te'),
       ],
-      localizationsDelegates: const [
+      localizationsDelegates: [
+        // Removed 'const' here
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -30,6 +31,7 @@ class MyApp extends ConsumerWidget {
       ],
       initialRoute: AppRoutes.splash,
       routes: AppRoutes.getRoutes(),
+      onGenerateRoute: AppRoutes.onGenerateRoute,
     );
   }
 }

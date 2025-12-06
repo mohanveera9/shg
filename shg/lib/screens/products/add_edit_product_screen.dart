@@ -6,7 +6,7 @@ import '../../services/api_service.dart';
 class AddEditProductScreen extends ConsumerStatefulWidget {
   final String? productId;
 
-  const AddEditProductScreen({super.key, this.productId});
+  const AddEditProductScreen({super.key, this.productId, required bool isEdit});
 
   @override
   ConsumerState<AddEditProductScreen> createState() => _AddEditProductScreenState();
