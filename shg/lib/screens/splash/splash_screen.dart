@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
-import '../../providers/group_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/riverpod_providers.dart';
 import '../../config/routes.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
     super.initState();
@@ -23,18 +22,22 @@ class _SplashScreenState extends State<SplashScreen> {
     
     if (!mounted) return;
 
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    await authProvider.checkAuthStatus();
+    final authNotifier = ref.read(authProvider.notifier);
+    await authNotifier.checkAuthStatus();
+    
+    final authState = ref.read(authProvider);
 
     if (!mounted) return;
 
-    if (authProvider.isAuthenticated) {
-      final groupProvider = Provider.of<GroupProvider>(context, listen: false);
-      await groupProvider.fetchUserGroups();
+    if (authState.isAuthenticated) {
+      final groupNotifier = ref.read(groupProvider.notifier);
+      await groupNotifier.fetchUserGroups();
+      
+      final groupState = ref.read(groupProvider);
       
       if (!mounted) return;
       
-      if (groupProvider.groups.isEmpty) {
+      if (groupState.groups.isEmpty) {
         Navigator.of(context).pushReplacementNamed(AppRoutes.groupSelection);
       } else {
         Navigator.of(context).pushReplacementNamed(AppRoutes.home);

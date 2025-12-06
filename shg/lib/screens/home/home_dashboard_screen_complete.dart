@@ -5,14 +5,14 @@ import '../../providers/riverpod_providers.dart';
 import '../../config/app_theme.dart';
 import '../../config/routes.dart';
 
-class HomeDashboardScreen extends ConsumerStatefulWidget {
-  const HomeDashboardScreen({super.key});
+class HomeDashboardScreenComplete extends ConsumerStatefulWidget {
+  const HomeDashboardScreenComplete({super.key});
 
   @override
-  ConsumerState<HomeDashboardScreen> createState() => _HomeDashboardScreenState();
+  ConsumerState<HomeDashboardScreenComplete> createState() => _HomeDashboardScreenCompleteState();
 }
 
-class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
+class _HomeDashboardScreenCompleteState extends ConsumerState<HomeDashboardScreenComplete> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -22,7 +22,7 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     if (groupState.currentGroup == null) {
       return Scaffold(
         appBar: AppBar(title: Text(l10n.dashboard)),
-        body: const Center(child: CircularProgressIndicator()),
+        body: const Center(child: Text('No group selected')),
       );
     }
 
@@ -165,7 +165,7 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            l10n.dashboard,
+            'Summary',
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -232,7 +232,7 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
   Widget _buildSummaryCard(String title, String value, IconData icon, Color color) {
     return Card(
       color: color,
-      elevation: 3,
+      elevation: 4,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
