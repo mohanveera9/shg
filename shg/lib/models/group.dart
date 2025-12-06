@@ -2,6 +2,8 @@ class Group {
   final String id;
   final String name;
   final String groupCode;
+  final String groupId;
+  final String? qrCode;
   final String village;
   final String block;
   final String district;
@@ -16,6 +18,8 @@ class Group {
     required this.id,
     required this.name,
     required this.groupCode,
+    required this.groupId,
+    this.qrCode,
     required this.village,
     required this.block,
     required this.district,
@@ -32,6 +36,8 @@ class Group {
       id: json['id'] ?? json['_id'] ?? '',
       name: json['name'] ?? '',
       groupCode: json['groupCode'] ?? '',
+      groupId: json['groupId'] ?? '',
+      qrCode: json['qrCode'],
       village: json['village'] ?? '',
       block: json['block'] ?? '',
       district: json['district'] ?? '',

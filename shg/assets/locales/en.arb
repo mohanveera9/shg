@@ -124,5 +124,9 @@
   "loan_approved": "Approved",
   "loan_disbursed": "Disbursed",
   "loan_closed": "Closed",
-  "todays_tasks": "Today's Tasks"
+  "todays_tasks": "Today's Tasks",
+  "group_created": "Group Created",
+  "group": "Group",
+  "created": "Created",
+  "go_to_dashboard": "Go to Dashboard"
 }

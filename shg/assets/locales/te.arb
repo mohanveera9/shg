@@ -124,5 +124,9 @@
   "loan_approved": "ఆమోదించబడింది",
   "loan_disbursed": "విడుదల",
   "loan_closed": "ముగిసింది",
-  "todays_tasks": "ఈరోజు పనులు"
+  "todays_tasks": "ఈరోజు పనులు",
+  "group_created": "సమూహం సృష్టించబడింది",
+  "group": "సమూహం",
+  "created": "సృష్టించబడింది",
+  "go_to_dashboard": "డ్యాష్‌బోర్డుకు వెళ్లండి"
 }
