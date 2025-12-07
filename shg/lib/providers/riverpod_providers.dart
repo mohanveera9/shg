@@ -211,7 +211,12 @@ final groupProvider = StateNotifierProvider<GroupNotifier, GroupState>((ref) {
 final dashboardProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, groupId) async {
   final api = ref.read(apiServiceProvider);
   final response = await api.get('/dashboard/$groupId', needsAuth: true);
-  return response;
+  
+  if (response['success'] == true && response['data'] != null) {
+    return response['data'];
+  }
+  
+  throw Exception(response['message'] ?? 'Failed to fetch dashboard data');
 });
 
 final transactionsProvider = FutureProvider.family<List<Transaction>, String>((ref, groupId) async {
