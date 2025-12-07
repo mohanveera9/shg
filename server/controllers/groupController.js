@@ -173,7 +173,7 @@ const getUserGroups = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const user = await User.findById(userId).populate('groups.groupId');
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({
@@ -182,12 +182,20 @@ const getUserGroups = async (req, res) => {
       });
     }
 
-    const groupIds = user.groups.map(g => g.groupId._id);
+    // Extract groupIds from user's groups array (groupId is already ObjectId, no need to populate)
+    const groupIds = user.groups.map(g => g.groupId);
+
+    if (groupIds.length === 0) {
+      return res.json({
+        success: true,
+        groups: [],
+      });
+    }
 
     const groups = await Group.find({ _id: { $in: groupIds } });
 
     const groupsWithRole = groups.map(group => {
-      const userGroup = user.groups.find(g => g.groupId._id.toString() === group._id.toString());
+      const userGroup = user.groups.find(g => g.groupId.toString() === group._id.toString());
       return {
         id: group._id,
         name: group.name,
