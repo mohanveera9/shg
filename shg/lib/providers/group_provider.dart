@@ -78,6 +78,7 @@ class GroupProvider with ChangeNotifier {
     notifyListeners();
 
     final response = await _api.get('/groups/my-groups', needsAuth: true);
+    print('Fetch Groups Response: $response');
 
     if (response['success'] == true && response['groups'] != null) {
       _groups = (response['groups'] as List)

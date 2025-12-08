@@ -2,7 +2,8 @@ const { customAlphabet } = require('nanoid');
 const QRCode = require('qrcode');
 
 const generateOTP = () => {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  // Always return 123456 for development/testing
+  return '123456';
 };
 
 const generateGroupCode = () => {

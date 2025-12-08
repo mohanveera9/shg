@@ -81,6 +81,7 @@ const createGroup = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('Error creating group:', error);
     res.status(500).json({
       success: false,
       message: 'Error creating group',
@@ -161,6 +162,7 @@ const joinGroup = async (req, res) => {
       },
     });
   } catch (error) {
+    console.error('Error joining group:', error);
     res.status(500).json({
       success: false,
       message: 'Error joining group',
@@ -173,21 +175,22 @@ const getUserGroups = async (req, res) => {
   try {
     const userId = req.userId;
 
-    const user = await User.findById(userId).populate('groups.groupId');
+    // Find all groups where the user is a member
+    const groups = await Group.find({
+      'members.userId': userId,
+      'members.status': 'ACTIVE' // Only get active memberships
+    });
 
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: 'User not found',
+    if (!groups || groups.length === 0) {
+      return res.json({
+        success: true,
+        groups: [],
       });
     }
 
-    const groupIds = user.groups.map(g => g.groupId._id);
-
-    const groups = await Group.find({ _id: { $in: groupIds } });
-
+    // Map groups with user's role in each group
     const groupsWithRole = groups.map(group => {
-      const userGroup = user.groups.find(g => g.groupId._id.toString() === group._id.toString());
+      const member = group.members.find(m => m.userId.toString() === userId);
       return {
         id: group._id,
         name: group.name,
@@ -203,7 +206,8 @@ const getUserGroups = async (req, res) => {
         researchConsent: group.researchConsent,
         cashInHand: group.cashInHand,
         totalSavings: group.totalSavings,
-        userRole: userGroup?.role,
+        userRole: member?.role || 'MEMBER',
+        joinedAt: member?.joinedAt,
       };
     });
 
@@ -212,6 +216,7 @@ const getUserGroups = async (req, res) => {
       groups: groupsWithRole,
     });
   } catch (error) {
+    console.error('Error fetching groups:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching groups',
@@ -223,6 +228,7 @@ const getUserGroups = async (req, res) => {
 const getGroupDetails = async (req, res) => {
   try {
     const { groupId } = req.params;
+    const userId = req.userId;
 
     const group = await Group.findById(groupId);
 
@@ -232,6 +238,19 @@ const getGroupDetails = async (req, res) => {
         message: 'Group not found',
       });
     }
+
+    // Check if user is a member of this group
+    const isMember = group.members.some(m => m.userId.toString() === userId);
+    
+    if (!isMember) {
+      return res.status(403).json({
+        success: false,
+        message: 'You are not a member of this group',
+      });
+    }
+
+    // Get user's role in the group
+    const member = group.members.find(m => m.userId.toString() === userId);
 
     res.json({
       success: true,
@@ -250,9 +269,11 @@ const getGroupDetails = async (req, res) => {
         researchConsent: group.researchConsent,
         cashInHand: group.cashInHand,
         totalSavings: group.totalSavings,
+        userRole: member?.role,
       },
     });
   } catch (error) {
+    console.error('Error fetching group details:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching group details',

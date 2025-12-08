@@ -24,6 +24,8 @@ class Transaction {
   });
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
+    // Handle both description and notes fields
+    final notes = json['notes'] ?? json['description'] ?? '';
     return Transaction(
       id: json['id'] ?? json['_id'] ?? '',
       groupId: json['groupId'] ?? '',
@@ -33,10 +35,10 @@ class Transaction {
           ? DateTime.parse(json['date']) 
           : DateTime.now(),
       category: json['category'] ?? '',
-      memberId: json['memberId'],
-      notes: json['notes'] ?? '',
+      memberId: json['memberId'] ?? json['userId']?['_id'] ?? json['userId']?.toString() ?? '',
+      notes: notes,
       receiptUrl: json['receiptUrl'] ?? '',
-      createdBy: json['createdBy'] ?? '',
+      createdBy: json['createdBy'] ?? json['userId']?['_id'] ?? json['userId']?.toString() ?? '',
     );
   }
 

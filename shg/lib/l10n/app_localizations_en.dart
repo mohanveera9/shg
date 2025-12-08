@@ -383,4 +383,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get todays_tasks => 'Today\'s Tasks';
+
+  @override
+  String get group_created => 'Group Created';
+
+  @override
+  String get group => 'Group';
+
+  @override
+  String get created => 'Created';
+
+  @override
+  String get go_to_dashboard => 'Go to Dashboard';
 }

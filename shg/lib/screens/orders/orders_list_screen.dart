@@ -18,30 +18,36 @@ class OrdersListScreen extends ConsumerWidget {
       ),
       body: ordersAsync == null
           ? const Center(child: Text('No group selected'))
-          : ordersAsync.when(
-              data: (orders) {
-                if (orders.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.abc, size: 64, color: Colors.grey[400]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No Orders Yet',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Orders will appear here',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  );
+          : RefreshIndicator(
+              onRefresh: () async {
+                if (group != null) {
+                  ref.invalidate(ordersProvider(group.id));
                 }
+              },
+              child: ordersAsync.when(
+                data: (orders) {
+                  if (orders.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.abc, size: 64, color: Colors.grey[400]),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No Orders Yet',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Orders will appear here',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-                return ListView.builder(
+                  return ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
@@ -79,9 +85,10 @@ class OrdersListScreen extends ConsumerWidget {
                     );
                   },
                 );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
             ),
     );
   }

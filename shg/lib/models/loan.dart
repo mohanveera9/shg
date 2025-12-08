@@ -42,22 +42,44 @@ class Loan {
   });
 
   factory Loan.fromJson(Map<String, dynamic> json) {
+    // Handle both tenure and tenureMonths, requestDate and createdAt
+    final tenureMonths = json['tenureMonths'] ?? json['tenure'];
+    final requestDateStr = json['requestDate'] ?? json['createdAt'] ?? DateTime.now().toIso8601String();
+    
+    // Calculate totalPaid from repayments if not provided
+    double totalPaid = json['totalPaid']?.toDouble() ?? 0.0;
+    if (json['repayments'] != null && totalPaid == 0.0) {
+      final repayments = json['repayments'] as List?;
+      if (repayments != null) {
+        totalPaid = repayments
+            .where((r) => r['status'] == 'PAID')
+            .fold(0.0, (sum, r) => sum + ((r['amount'] ?? 0).toDouble()));
+      }
+    }
+    
+    // Calculate remainingBalance if not provided
+    double? remainingBalance = json['remainingBalance']?.toDouble();
+    if (remainingBalance == null && json['disbursedAmount'] != null) {
+      final disbursedAmount = json['disbursedAmount'].toDouble();
+      remainingBalance = disbursedAmount > 0 ? disbursedAmount - totalPaid : null;
+    }
+    
     return Loan(
       id: json['_id'] ?? json['id'] ?? '',
       groupId: json['groupId'] ?? '',
-      borrowerId: json['borrowerId']?['_id'] ?? json['borrowerId'] ?? '',
-      borrowerName: json['borrowerId']?['name'] ?? json['borrowerName'] ?? '',
-      borrowerPhone: json['borrowerId']?['phone'] ?? json['borrowerPhone'] ?? '',
+      borrowerId: json['borrowerId']?['_id'] ?? json['borrowerId']?.toString() ?? json['borrowerId'] ?? '',
+      borrowerName: json['borrowerName'] ?? json['borrowerId']?['name'] ?? '',
+      borrowerPhone: json['borrowerPhone'] ?? json['borrowerId']?['phone'] ?? '',
       status: json['status'] ?? '',
       requestedAmount: (json['requestedAmount'] ?? 0.0).toDouble(),
       approvedAmount: json['approvedAmount']?.toDouble(),
       interestRate: json['interestRate']?.toDouble(),
-      tenureMonths: json['tenureMonths'],
+      tenureMonths: tenureMonths != null ? (tenureMonths is int ? tenureMonths : tenureMonths.toInt()) : null,
       emiAmount: json['emiAmount']?.toDouble(),
-      totalPaid: (json['totalPaid'] ?? 0.0).toDouble(),
-      remainingBalance: json['remainingBalance']?.toDouble(),
+      totalPaid: totalPaid,
+      remainingBalance: remainingBalance,
       purpose: json['purpose'] ?? '',
-      requestDate: DateTime.parse(json['requestDate'] ?? DateTime.now().toIso8601String()),
+      requestDate: DateTime.parse(requestDateStr),
       approvalDate: json['approvalDate'] != null ? DateTime.parse(json['approvalDate']) : null,
       disbursalDate: json['disbursalDate'] != null ? DateTime.parse(json['disbursalDate']) : null,
       documents: json['documents'],

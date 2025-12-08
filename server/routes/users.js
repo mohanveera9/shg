@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/auth');
+const { updateProfile } = require('../controllers/userController');
 
 router.get('/profile', authenticate, (req, res) => {
   res.json({
@@ -16,8 +17,6 @@ router.get('/profile', authenticate, (req, res) => {
   });
 });
 
-router.put('/profile', authenticate, (req, res) => {
-  res.json({ success: true, message: 'Profile updated' });
-});
+router.put('/profile', authenticate, updateProfile);
 
 module.exports = router;

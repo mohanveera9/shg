@@ -18,30 +18,36 @@ class ProductsListScreen extends ConsumerWidget {
       ),
       body: productsAsync == null
           ? const Center(child: Text('No group selected'))
-          : productsAsync.when(
-              data: (products) {
-                if (products.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.shopping_bag, size: 64, color: Colors.grey[400]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No Products Yet',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Create your first product',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  );
+          : RefreshIndicator(
+              onRefresh: () async {
+                if (group != null) {
+                  ref.invalidate(productsProvider(group.id));
                 }
+              },
+              child: productsAsync.when(
+                data: (products) {
+                  if (products.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.shopping_bag, size: 64, color: Colors.grey[400]),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No Products Yet',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Create your first product',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-                return GridView.builder(
+                  return GridView.builder(
                   padding: const EdgeInsets.all(16),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -103,9 +109,10 @@ class ProductsListScreen extends ConsumerWidget {
                     );
                   },
                 );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.of(context).pushNamed('/add-product'),

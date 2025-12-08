@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../config/app_config.dart';
 import '../../config/routes.dart';
+import '../../providers/riverpod_providers.dart';
 import '../../services/storage_service.dart';
 
-class LanguageSelectionScreen extends StatefulWidget {
+class LanguageSelectionScreen extends ConsumerStatefulWidget {
   const LanguageSelectionScreen({super.key});
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  ConsumerState<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
 }
 
-class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScreen> {
   String _selectedLanguage = AppConfig.defaultLanguage;
-  final _storage = StorageService();
+  
+  @override
+  void initState() {
+    super.initState();
+    // Load saved language preference
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final storage = StorageService();
+      final savedLanguage = await storage.getLanguage();
+      if (mounted) {
+        setState(() {
+          _selectedLanguage = savedLanguage;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +86,11 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () async {
-                    await _storage.saveLanguage(_selectedLanguage);
+                    final storage = StorageService();
+                    await storage.saveLanguage(_selectedLanguage);
+                    // Update both providers
+                    ref.read(settingsProvider.notifier).setLanguage(_selectedLanguage);
+                    ref.read(languageProvider.notifier).setLanguage(_selectedLanguage);
                     if (mounted) {
                       Navigator.of(context).pushReplacementNamed(AppRoutes.permissions);
                     }

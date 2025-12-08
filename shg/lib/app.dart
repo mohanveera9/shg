@@ -11,7 +11,9 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final language = ref.watch(languageProvider);
+    // Use settingsProvider language which loads from storage on app start
+    final settings = ref.watch(settingsProvider);
+    final language = settings.language;
 
     return MaterialApp(
       title: 'SHG Management',

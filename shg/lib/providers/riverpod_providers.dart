@@ -89,6 +89,32 @@ class AuthNotifier extends StateNotifier<AuthState> {
     return response['success'] == true;
   }
 
+  Future<void> fetchUserProfile() async {
+    state = state.copyWith(isLoading: true);
+    try {
+      final api = ApiService();
+      final response = await api.get('/users/profile', needsAuth: true);
+      if (response['success'] == true && response['user'] != null) {
+        final user = User.fromJson(response['user']);
+        state = state.copyWith(
+          user: user,
+          isAuthenticated: true,
+          isLoading: false,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          errorMessage: response['message'] ?? 'Failed to fetch profile',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: e.toString(),
+      );
+    }
+  }
+
   Future<void> logout() async {
     state = state.copyWith(isLoading: true);
     await authService.logout();
@@ -143,6 +169,7 @@ class GroupNotifier extends StateNotifier<GroupState> {
   Future<void> fetchUserGroups() async {
     state = state.copyWith(isLoading: true);
     final response = await apiService.get('/groups/my-groups', needsAuth: true);
+    print('Fetch Groups Response: $response');
     
     if (response['success'] == true) {
       final groups = (response['groups'] as List)
@@ -168,6 +195,7 @@ class GroupNotifier extends StateNotifier<GroupState> {
   Future<Group?> createGroup(Map<String, dynamic> data) async {
     state = state.copyWith(isLoading: true);
     final response = await apiService.post('/groups/create', data, needsAuth: true);
+    print('Create Group Response: $response');
     
     if (response['success'] == true && response['group'] != null) {
       final createdGroup = Group.fromJson(response['group']);
@@ -211,6 +239,7 @@ final groupProvider = StateNotifierProvider<GroupNotifier, GroupState>((ref) {
 final dashboardProvider = FutureProvider.family<Map<String, dynamic>, String>((ref, groupId) async {
   final api = ref.read(apiServiceProvider);
   final response = await api.get('/dashboard/$groupId', needsAuth: true);
+  print('Dashboard Response: $response');
   
   if (response['success'] == true && response['data'] != null) {
     return response['data'];
@@ -222,6 +251,7 @@ final dashboardProvider = FutureProvider.family<Map<String, dynamic>, String>((r
 final transactionsProvider = FutureProvider.family<List<Transaction>, String>((ref, groupId) async {
   final api = ref.read(apiServiceProvider);
   final response = await api.get('/transactions/$groupId', needsAuth: true);
+  print('Transactions Response: $response');
   
   if (response['success'] == true) {
     return (response['transactions'] as List)
@@ -267,7 +297,27 @@ final ordersProvider = FutureProvider.family<List<OrderModel>, String>((ref, gro
   return [];
 });
 
-final languageProvider = StateProvider<String>((ref) => 'te');
+final languageProvider = StateNotifierProvider<LanguageNotifier, String>((ref) {
+  return LanguageNotifier(ref.read(storageServiceProvider));
+});
+
+class LanguageNotifier extends StateNotifier<String> {
+  final StorageService storageService;
+
+  LanguageNotifier(this.storageService) : super('te') {
+    _loadLanguage();
+  }
+
+  Future<void> _loadLanguage() async {
+    final language = await storageService.getLanguage();
+    state = language;
+  }
+
+  Future<void> setLanguage(String language) async {
+    await storageService.saveLanguage(language);
+    state = language;
+  }
+}
 
 final settingsProvider = StateNotifierProvider<SettingsNotifier, SettingsState>((ref) {
   return SettingsNotifier(ref.read(storageServiceProvider));
@@ -307,6 +357,8 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> loadSettings() async {
     final language = await storageService.getLanguage();
     state = state.copyWith(language: language);
+    // Also sync with languageProvider
+    // Note: We can't access ref here, so this will be handled in app.dart
   }
 
   Future<void> setNotifications(bool enabled) async {

@@ -1,25 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/auth');
+const {
+  getLoans,
+  requestLoan,
+  approveLoan,
+  disburseLoan,
+  repayLoan,
+} = require('../controllers/loanController');
 
-router.get('/:groupId', authenticate, (req, res) => {
-  res.json({ success: true, loans: [] });
-});
-
-router.post('/:groupId/request', authenticate, (req, res) => {
-  res.json({ success: true, message: 'Loan requested' });
-});
-
-router.put('/:loanId/approve', authenticate, (req, res) => {
-  res.json({ success: true, message: 'Loan approved' });
-});
-
-router.put('/:loanId/disburse', authenticate, (req, res) => {
-  res.json({ success: true, message: 'Loan disbursed' });
-});
-
-router.post('/:loanId/repay', authenticate, (req, res) => {
-  res.json({ success: true, message: 'Repayment processed' });
-});
+router.get('/:groupId', authenticate, getLoans);
+router.post('/:groupId/request', authenticate, requestLoan);
+router.put('/:loanId/approve', authenticate, approveLoan);
+router.put('/:loanId/disburse', authenticate, disburseLoan);
+router.post('/:loanId/repay', authenticate, repayLoan);
 
 module.exports = router;

@@ -41,7 +41,7 @@ class SettingsScreen extends ConsumerWidget {
               onChanged: (value) {
                 if (value != null) {
                   ref.read(settingsProvider.notifier).setLanguage(value);
-                  ref.read(languageProvider.notifier).state = value;
+                  ref.read(languageProvider.notifier).setLanguage(value);
                 }
               },
             ),

@@ -21,6 +21,7 @@ class ApiService {
       if (token != null) {
         headers['Authorization'] = 'Bearer $token';
       }
+      print('Headers: $headers');
     }
 
     return headers;

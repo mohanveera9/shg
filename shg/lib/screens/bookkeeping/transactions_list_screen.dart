@@ -27,12 +27,18 @@ class TransactionsListScreen extends ConsumerWidget {
         onPressed: () => Navigator.pushNamed(context, AppRoutes.addTransaction),
         child: const Icon(Icons.add),
       ),
-      body: transactionsAsync.when(
-        data: (transactions) {
-          if (transactions.isEmpty) {
-            return Center(child: Text(l10n.empty_state));
+      body: RefreshIndicator(
+        onRefresh: () async {
+          if (groupState.currentGroup != null) {
+            ref.invalidate(transactionsProvider(groupState.currentGroup!.id));
           }
-          return ListView.builder(
+        },
+        child: transactionsAsync.when(
+          data: (transactions) {
+            if (transactions.isEmpty) {
+              return Center(child: Text(l10n.empty_state));
+            }
+            return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: transactions.length,
             itemBuilder: (context, index) {
@@ -55,9 +61,10 @@ class TransactionsListScreen extends ConsumerWidget {
               );
             },
           );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('Error: $error')),
+        ),
       ),
     );
   }

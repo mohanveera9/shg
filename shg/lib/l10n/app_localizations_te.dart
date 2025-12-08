@@ -383,4 +383,16 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get todays_tasks => 'ఈరోజు పనులు';
+
+  @override
+  String get group_created => 'సమూహం సృష్టించబడింది';
+
+  @override
+  String get group => 'సమూహం';
+
+  @override
+  String get created => 'సృష్టించబడింది';
+
+  @override
+  String get go_to_dashboard => 'డ్యాష్‌బోర్డుకు వెళ్లండి';
 }

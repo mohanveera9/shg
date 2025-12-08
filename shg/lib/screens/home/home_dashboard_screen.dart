@@ -20,6 +20,7 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     final authState = ref.watch(authProvider);
     
     if (groupState.currentGroup == null) {
+      print('No current group selected');
       return Scaffold(
         appBar: AppBar(title: Text(l10n.dashboard)),
         body: const Center(child: CircularProgressIndicator()),
@@ -175,9 +176,9 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 1.2,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+            childAspectRatio: 1.1,
             children: [
               _buildSummaryCard(
                 l10n.cash_in_hand,
@@ -238,17 +239,17 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48, color: Colors.white),
-            const SizedBox(height: 12),
+            Icon(icon, size:30, color: Colors.white),
+            const SizedBox(height: 8),
             Text(
               value,
               style: const TextStyle(
-                fontSize: 24,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Text(
               title,
               textAlign: TextAlign.center,

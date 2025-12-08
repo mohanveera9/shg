@@ -18,35 +18,41 @@ class LoansDashboardScreen extends ConsumerWidget {
       ),
       body: loansAsync == null
           ? const Center(child: Text('No group selected'))
-          : loansAsync.when(
-              data: (loans) {
-                if (loans.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
-                        const SizedBox(height: 16),
-                        Text(
-                          'No Loans Yet',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Create or view loans here',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  );
+          : RefreshIndicator(
+              onRefresh: () async {
+                if (group != null) {
+                  ref.invalidate(loansProvider(group.id));
                 }
+              },
+              child: loansAsync.when(
+                data: (loans) {
+                  if (loans.isEmpty) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
+                          const SizedBox(height: 16),
+                          Text(
+                            'No Loans Yet',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Create or view loans here',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-                final approvedLoans = loans.where((l) => l.status == 'APPROVED').length;
-                final disbursedLoans = loans.where((l) => l.status == 'DISBURSED').length;
-                final requestedLoans = loans.where((l) => l.status == 'REQUESTED').length;
-                final totalAmount = loans.fold<double>(0, (sum, l) => sum + (l.approvedAmount ?? l.requestedAmount));
+                  final approvedLoans = loans.where((l) => l.status == 'APPROVED').length;
+                  final disbursedLoans = loans.where((l) => l.status == 'DISBURSED').length;
+                  final requestedLoans = loans.where((l) => l.status == 'REQUESTED').length;
+                  final totalAmount = loans.fold<double>(0, (sum, l) => sum + (l.approvedAmount ?? l.requestedAmount));
 
-                return ListView(
+                  return ListView(
                   padding: const EdgeInsets.all(16),
                   children: [
                     _buildStatCard(
@@ -85,10 +91,11 @@ class LoansDashboardScreen extends ConsumerWidget {
                     const SizedBox(height: 12),
                     ...loans.take(5).map((loan) => _buildLoanCard(context, loan)).toList(),
                   ],
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
+                  );
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (err, stack) => Center(child: Text('Error: $err')),
+              ),
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

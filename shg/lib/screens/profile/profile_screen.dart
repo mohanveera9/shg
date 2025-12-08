@@ -1,24 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shg_app/l10n/app_localizations.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
 
-class ProfileScreen extends ConsumerWidget {
+class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch user profile if not available
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final auth = ref.read(authProvider);
+      if (auth.user == null && auth.isAuthenticated) {
+        ref.read(authProvider.notifier).fetchUserProfile();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final auth = ref.watch(authProvider);
     final user = auth.user;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: Text(l10n.profile),
         elevation: 0,
       ),
-      body: user == null
-          ? const Center(child: Text('Not authenticated'))
-          : ListView(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await ref.read(authProvider.notifier).fetchUserProfile();
+        },
+        child: auth.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : user == null
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.error_outline, size: 64, color: Colors.grey),
+                        const SizedBox(height: 16),
+                        Text(
+                          auth.errorMessage ?? l10n.error,
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            ref.read(authProvider.notifier).fetchUserProfile();
+                          },
+                          child: Text(l10n.try_again),
+                        ),
+                      ],
+                    ),
+                  )
+                : ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 Center(
@@ -33,7 +77,7 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        user.name.isNotEmpty ? user.name : 'No Name',
+                        user.name.isNotEmpty ? user.name : l10n.app_name,
                         style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       const SizedBox(height: 8),
@@ -52,11 +96,11 @@ class ProfileScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildInfoRow('Phone', user.phone),
+                        _buildInfoRow(l10n.phone_input_title.replaceAll('Enter ', ''), user.phone),
                         const Divider(),
-                        _buildInfoRow('Role', user.role),
+                        _buildInfoRow(l10n.role, user.role),
                         const Divider(),
-                        _buildInfoRow('Language', user.language.toUpperCase()),
+                        _buildInfoRow(l10n.language_selection_label, user.language.toUpperCase()),
                       ],
                     ),
                   ),
@@ -65,7 +109,7 @@ class ProfileScreen extends ConsumerWidget {
                 ElevatedButton.icon(
                   onPressed: () => Navigator.of(context).pushNamed('/edit-profile'),
                   icon: const Icon(Icons.edit),
-                  label: const Text('Edit Profile'),
+                  label: Text(l10n.edit_name),
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -78,7 +122,7 @@ class ProfileScreen extends ConsumerWidget {
                     Navigator.of(context).pushNamedAndRemoveUntil('/splash', (route) => false);
                   },
                   icon: const Icon(Icons.logout),
-                  label: const Text('Logout'),
+                  label: Text(l10n.logout),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -86,6 +130,7 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
+      ),
     );
   }
 

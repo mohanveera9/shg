@@ -28,18 +28,20 @@ class OrderModel {
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
+    // Handle both createdAt and orderDate fields
+    final orderDateStr = json['orderDate'] ?? json['createdAt'] ?? DateTime.now().toIso8601String();
     return OrderModel(
       id: json['_id'] ?? json['id'] ?? '',
       groupId: json['groupId'] ?? '',
-      productId: json['productId']?['_id'] ?? json['productId'] ?? '',
-      productTitle: json['productId']?['title'] ?? json['productTitle'] ?? '',
-      customerId: json['customerId']?['_id'] ?? json['customerId'] ?? '',
-      customerName: json['customerId']?['name'] ?? json['customerName'] ?? '',
-      customerPhone: json['customerId']?['phone'] ?? json['customerPhone'] ?? '',
+      productId: json['productId']?['_id'] ?? json['productId']?.toString() ?? json['productId'] ?? '',
+      productTitle: json['productTitle'] ?? json['productId']?['title'] ?? '',
+      customerId: json['customerId']?['_id'] ?? json['customerId']?.toString() ?? json['customerId'] ?? '',
+      customerName: json['customerName'] ?? json['customerId']?['name'] ?? '',
+      customerPhone: json['customerPhone'] ?? json['customerId']?['phone'] ?? '',
       quantity: json['quantity'] ?? 0,
       totalAmount: (json['totalAmount'] ?? 0.0).toDouble(),
       status: json['status'] ?? 'PENDING',
-      orderDate: DateTime.parse(json['orderDate'] ?? DateTime.now().toIso8601String()),
+      orderDate: DateTime.parse(orderDateStr),
       deliveryDate: json['deliveryDate'] != null ? DateTime.parse(json['deliveryDate']) : null,
     );
   }
