@@ -19,12 +19,20 @@ jobs:
     - name: Setup Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.24.0'
+        flutter-version: '3.27.0'
         channel: 'stable'
     
     - name: Flutter doctor
       working-directory: ./shg
       run: flutter doctor -v
+    
+    - name: Clean Flutter project
+      working-directory: ./shg
+      run: flutter clean
+    
+    - name: Remove pubspec.lock
+      working-directory: ./shg
+      run: rm -f pubspec.lock
     
     - name: Install Flutter dependencies
       working-directory: ./shg
