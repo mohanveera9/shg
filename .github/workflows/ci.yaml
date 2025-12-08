@@ -1,4 +1,5 @@
-name: Flutter CI
+# .github/workflows/ci.yml
+name: CI - Flutter & Backend
 
 on:
   push:
@@ -7,23 +8,108 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  flutter-ci:
+    name: Flutter Build & Test
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
-    - uses: subosito/flutter-action@v2
-      with:
-        flutter-version: '3.16.0'
+    - name: Checkout code
+      uses: actions/checkout@v3
     
-    - name: Install dependencies
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+        channel: 'stable'
+    
+    - name: Flutter doctor
+      working-directory: ./shg
+      run: flutter doctor -v
+    
+    - name: Install Flutter dependencies
+      working-directory: ./shg
       run: flutter pub get
     
-    - name: Analyze code
+    - name: Verify Flutter formatting
+      working-directory: ./shg
+      run: dart format --set-exit-if-changed .
+      continue-on-error: true
+    
+    - name: Analyze Flutter code
+      working-directory: ./shg
       run: flutter analyze
     
-    - name: Run tests
-      run: flutter test
+    - name: Run Flutter tests
+      working-directory: ./shg
+      run: flutter test --coverage
     
-    - name: Build APK
+    - name: Build Android APK
+      working-directory: ./shg
       run: flutter build apk --release
+    
+    - name: Build Android App Bundle
+      working-directory: ./shg
+      run: flutter build appbundle --release
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release-apk
+        path: shg/build/app/outputs/flutter-apk/app-release.apk
+        retention-days: 7
+    
+    - name: Upload App Bundle artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-release-bundle
+        path: shg/build/app/outputs/bundle/release/app-release.aab
+        retention-days: 7
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./shg/coverage/lcov.info
+        flags: flutter
+        name: flutter-coverage
+      continue-on-error: true
+
+  backend-ci:
+    name: Backend Build & Test
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: server/package-lock.json
+    
+    - name: Install backend dependencies
+      working-directory: ./server
+      run: npm ci
+    
+    - name: Lint backend code
+      working-directory: ./server
+      run: npm run lint
+      continue-on-error: true
+    
+    - name: Run backend tests
+      working-directory: ./server
+      run: npm test
+    
+    - name: Build backend
+      working-directory: ./server
+      run: npm run build
+      continue-on-error: true
+    
+    - name: Upload backend build artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: backend-build
+        path: server/dist/
+        retention-days: 7
+      continue-on-error: true
