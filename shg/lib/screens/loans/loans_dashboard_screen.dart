@@ -33,22 +33,6 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
       appBar: AppBar(
         title: Text(l10n.loans),
         elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.pending_actions),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.pendingApprovals);
-            },
-            tooltip: l10n.pending_approvals,
-          ),
-          IconButton(
-            icon: const Icon(Icons.account_balance_wallet),
-            onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.myLoans);
-            },
-            tooltip: l10n.my_loans,
-          ),
-        ],
       ),
       body: loansAsync == null
           ? Center(child: Text(l10n.empty_state))
@@ -72,10 +56,18 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
                     );
                   }
 
-                  final disbursedLoans = loans.where((l) => l.status == 'DISBURSED').length;
-                  final requestedLoans = loans.where((l) => l.status == 'REQUESTED').length;
-                  final totalAmount = loans.fold<double>(0, (sum, l) => sum + (l.approvedAmount ?? l.requestedAmount));
                   final filteredLoans = _filterLoans(loans);
+                  
+                  // Calculate stats based on ALL loans (not filtered)
+                  final requestedLoans = loans.where((l) => l.status == 'REQUESTED').length;
+                  final approvedLoans = loans.where((l) => l.status == 'APPROVED').length;
+                  final declinedLoans = loans.where((l) => l.status == 'REJECTED').length;
+                  final totalAmountApproved = loans
+                      .where((l) => l.status == 'APPROVED')
+                      .fold<double>(
+                        0,
+                        (sum, l) => sum + (l.approvedAmount ?? l.requestedAmount),
+                      );
 
                   return Column(
                     children: [
@@ -88,35 +80,35 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          childAspectRatio: 1.3,
+                          childAspectRatio: 1.1,
                           children: [
                             _buildStatCard(
                               context,
-                              l10n.loans,
-                              loans.length.toString(),
-                              Icons.trending_up,
+                              'Requested Loans',
+                              requestedLoans.toString(),
+                              Icons.schedule,
+                              Colors.orange,
+                            ),
+                            _buildStatCard(
+                              context,
+                              'Approved Loans',
+                              approvedLoans.toString(),
+                              Icons.check_circle,
                               AppTheme.primaryGreen,
                             ),
                             _buildStatCard(
                               context,
-                              l10n.amount,
-                              '₹${totalAmount.toStringAsFixed(0)}',
-                              Icons.attach_money,
-                              AppTheme.lightGreen,
+                              'Declined Loans',
+                              declinedLoans.toString(),
+                              Icons.cancel,
+                              Colors.red,
                             ),
                             _buildStatCard(
                               context,
-                              l10n.pending_approvals,
-                              requestedLoans.toString(),
-                              Icons.schedule,
-                              AppTheme.lightOrange,
-                            ),
-                            _buildStatCard(
-                              context,
-                              'Active',
-                              disbursedLoans.toString(),
-                              Icons.verified,
-                              AppTheme.lightBlue,
+                              'Amount Approved',
+                              '₹${totalAmountApproved.toStringAsFixed(0)}',
+                              Icons.currency_rupee,
+                              AppTheme.primaryGreen,
                             ),
                           ],
                         ),
@@ -162,12 +154,12 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
                               ),
                               const SizedBox(width: 8),
                               FilterChip(
-                                label: const Text('Disbursed'),
+                                label: const Text('Declined'),
                                 showCheckmark: false,
-                                selected: _selectedFilter == 'DISBURSED',
+                                selected: _selectedFilter == 'REJECTED',
                                 onSelected: (selected) {
                                   setState(() {
-                                    _selectedFilter = selected ? 'DISBURSED' : null;
+                                    _selectedFilter = selected ? 'REJECTED' : null;
                                   });
                                 },
                               ),
@@ -233,46 +225,93 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
   ) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            color.withOpacity(0.1),
+            color.withOpacity(0.05),
+          ],
+        ),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+          width: 1.5,
+        ),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
+            color: color.withOpacity(0.25),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+            spreadRadius: 0,
           ),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(18),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Icon(icon, size: 24, color: color),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: color,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[700],
+                          letterSpacing: 0.3,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: color,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        color,
+                        color.withOpacity(0.8),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: color.withOpacity(0.4),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Icon(
+                    icon,
+                    size: 24,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -282,8 +321,8 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
 
   Widget _buildLoanCard(BuildContext context, Loan loan) {
     final statusColor = _getStatusColor(loan.status);
-    final amount = loan.approvedAmount ?? loan.requestedAmount;
-    final isDisbursed = loan.status == 'DISBURSED';
+    // Always use requestedAmount, fallback to approvedAmount if requestedAmount is 0
+    final amount = loan.requestedAmount > 0 ? loan.requestedAmount : (loan.approvedAmount ?? 0);
     
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -368,42 +407,8 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
                       ),
                     ],
                   ),
-                  if (isDisbursed && loan.remainingBalance != null)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          'Remaining',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '₹${loan.remainingBalance!.toStringAsFixed(0)}',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.orange[700],
-                          ),
-                        ),
-                      ],
-                    ),
                 ],
               ),
-              if (isDisbursed && loan.remainingBalance != null) ...[
-                const SizedBox(height: 12),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: LinearProgressIndicator(
-                    value: (amount - loan.remainingBalance!) / amount,
-                    minHeight: 6,
-                    backgroundColor: Colors.grey[200],
-                    valueColor: AlwaysStoppedAnimation<Color>(statusColor),
-                  ),
-                ),
-              ],
             ],
           ),
         ),
@@ -413,12 +418,10 @@ class _LoansDashboardScreenState extends ConsumerState<LoansDashboardScreen> {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'APPROVED':
-        return AppTheme.primaryGreen;
-      case 'DISBURSED':
-        return AppTheme.primaryGreen;
       case 'REQUESTED':
         return Colors.orange;
+      case 'APPROVED':
+        return AppTheme.primaryGreen;
       case 'REJECTED':
         return Colors.red;
       default:

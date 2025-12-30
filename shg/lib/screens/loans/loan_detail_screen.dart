@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
-import '../../config/routes.dart';
 
 class LoanDetailScreen extends ConsumerStatefulWidget {
   final String loanId;
@@ -48,7 +47,6 @@ class _LoanDetailScreenState extends ConsumerState<LoanDetailScreen> {
           }
 
           final loan = snapshot.data!['loan'];
-          final repayments = snapshot.data!['repayments'] ?? [];
 
           return ListView(
             padding: const EdgeInsets.all(16),
@@ -95,62 +93,13 @@ class _LoanDetailScreenState extends ConsumerState<LoanDetailScreen> {
                       ),
                       const SizedBox(height: 16),
                       _buildDetailRow('Purpose', loan['purpose'] ?? '-'),
-                      _buildDetailRow('Requested Amount', '₹${loan['requestedAmount'].toStringAsFixed(0)}'),
-                      if (loan['approvedAmount'] != null)
-                        _buildDetailRow('Approved Amount', '₹${loan['approvedAmount'].toStringAsFixed(0)}'),
-                      if (loan['interestRate'] != null)
-                        _buildDetailRow('Interest Rate', '${loan['interestRate']}%'),
+                      _buildDetailRow('Requested Amount', '₹${(loan['requestedAmount'] ?? 0).toStringAsFixed(0)}'),
                       if (loan['tenureMonths'] != null)
                         _buildDetailRow('Tenure', '${loan['tenureMonths']} months'),
-                      if (loan['emiAmount'] != null)
-                        _buildDetailRow('EMI Amount', '₹${loan['emiAmount'].toStringAsFixed(0)}'),
-                      _buildDetailRow('Total Paid', '₹${loan['totalPaid'].toStringAsFixed(0)}'),
-                      if (loan['remainingBalance'] != null)
-                        _buildDetailRow('Remaining Balance', '₹${loan['remainingBalance'].toStringAsFixed(0)}'),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 24),
-              if (loan['status'] == 'APPROVED' || loan['status'] == 'DISBURSED')
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: loan['status'] == 'APPROVED'
-                        ? () => Navigator.of(context).pushNamed(AppRoutes.disburseLoan, arguments: widget.loanId)
-                        : () => Navigator.of(context).pushNamed(AppRoutes.repayEmi, arguments: widget.loanId),
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: Text(loan['status'] == 'APPROVED' ? 'Disburse Loan' : 'Make Payment'),
-                  ),
-                ),
-              const SizedBox(height: 16),
-              Text('Repayment History', style: Theme.of(context).textTheme.titleLarge),
-              const SizedBox(height: 12),
-              if (repayments.isEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24),
-                    child: Text(
-                      'No repayments yet',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
-                    ),
-                  ),
-                )
-              else
-                ...repayments.map<Widget>((repayment) => Card(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: ListTile(
-                    title: Text('₹${repayment['amount'].toStringAsFixed(0)}'),
-                    subtitle: Text(repayment['paymentDate'] ?? ''),
-                    trailing: Text(
-                      repayment['paymentMethod'] ?? 'N/A',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ),
-                )).toList(),
             ],
           );
         },
@@ -173,12 +122,10 @@ class _LoanDetailScreenState extends ConsumerState<LoanDetailScreen> {
 
   Color _getStatusColor(String status) {
     switch (status) {
-      case 'APPROVED':
-        return AppTheme.primaryGreen;
-      case 'DISBURSED':
-        return AppTheme.primaryGreen;
       case 'REQUESTED':
         return Colors.orange;
+      case 'APPROVED':
+        return AppTheme.primaryGreen;
       case 'REJECTED':
         return Colors.red;
       default:
