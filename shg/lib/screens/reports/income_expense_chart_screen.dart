@@ -44,7 +44,7 @@ class IncomeExpenseChartScreen extends ConsumerWidget {
                               children: [
                                 Column(
                                   children: [
-                                    Icon(Icons.trending_up, color: Colors.green, size: 32),
+                                    const Icon(Icons.trending_up, color: Colors.green, size: 32),
                                     const SizedBox(height: 8),
                                     Text('Income', style: Theme.of(context).textTheme.bodySmall),
                                     const SizedBox(height: 4),
@@ -56,7 +56,7 @@ class IncomeExpenseChartScreen extends ConsumerWidget {
                                 ),
                                 Column(
                                   children: [
-                                    Icon(Icons.trending_down, color: Colors.red, size: 32),
+                                    const Icon(Icons.trending_down, color: Colors.red, size: 32),
                                     const SizedBox(height: 8),
                                     Text('Expense', style: Theme.of(context).textTheme.bodySmall),
                                     const SizedBox(height: 4),
@@ -68,7 +68,7 @@ class IncomeExpenseChartScreen extends ConsumerWidget {
                                 ),
                                 Column(
                                   children: [
-                                    Icon(Icons.balance, color: Colors.blue, size: 32),
+                                    const Icon(Icons.balance, color: Colors.blue, size: 32),
                                     const SizedBox(height: 8),
                                     Text('Balance', style: Theme.of(context).textTheme.bodySmall),
                                     const SizedBox(height: 4),
@@ -104,7 +104,7 @@ class IncomeExpenseChartScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                    )).toList(),
+                    )),
                   ],
                 );
               },

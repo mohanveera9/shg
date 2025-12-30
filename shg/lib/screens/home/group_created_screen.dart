@@ -68,9 +68,9 @@ class GroupCreatedScreen extends ConsumerWidget {
                       const SizedBox(height: 24),
                       const Divider(),
                       const SizedBox(height: 24),
-                      Text(
+                      const Text(
                         'Group Code',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
                         ),
@@ -108,9 +108,9 @@ class GroupCreatedScreen extends ConsumerWidget {
                       const SizedBox(height: 24),
                       const Divider(),
                       const SizedBox(height: 24),
-                      Text(
+                      const Text(
                         'QR Code',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           color: Colors.grey,
                         ),

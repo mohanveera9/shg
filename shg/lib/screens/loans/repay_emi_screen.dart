@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
-import '../../services/api_service.dart';
 
 class RepayEmiScreen extends ConsumerStatefulWidget {
   final String loanId;

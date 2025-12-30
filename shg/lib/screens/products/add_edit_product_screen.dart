@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
-import '../../services/api_service.dart';
 
 class AddEditProductScreen extends ConsumerStatefulWidget {
   final String? productId;
@@ -9,7 +8,8 @@ class AddEditProductScreen extends ConsumerStatefulWidget {
   const AddEditProductScreen({super.key, this.productId, required bool isEdit});
 
   @override
-  ConsumerState<AddEditProductScreen> createState() => _AddEditProductScreenState();
+  ConsumerState<AddEditProductScreen> createState() =>
+      _AddEditProductScreenState();
 }
 
 class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
@@ -29,7 +29,9 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
   }
 
   Future<void> _submitProduct() async {
-    if (_titleController.text.isEmpty || _priceController.text.isEmpty || _stockController.text.isEmpty) {
+    if (_titleController.text.isEmpty ||
+        _priceController.text.isEmpty ||
+        _stockController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all required fields')),
       );
@@ -44,7 +46,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
 
       final apiService = ref.read(apiServiceProvider);
       final isEdit = widget.productId != null;
-      final endpoint = isEdit ? '/products/${widget.productId}' : '/products/${group.id}';
+      final endpoint =
+          isEdit ? '/products/${widget.productId}' : '/products/${group.id}';
       final method = isEdit ? 'put' : 'post';
 
       final body = {
@@ -61,7 +64,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
       if (response['success'] == true) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(isEdit ? 'Product updated' : 'Product created')),
+            SnackBar(
+                content: Text(isEdit ? 'Product updated' : 'Product created')),
           );
           Navigator.pop(context);
         }
@@ -95,7 +99,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
             controller: _titleController,
             decoration: InputDecoration(
               labelText: 'Product Title',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.shopping_bag),
             ),
           ),
@@ -105,7 +110,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
             maxLines: 3,
             decoration: InputDecoration(
               labelText: 'Description',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.description),
             ),
           ),
@@ -115,11 +121,13 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
               Expanded(
                 child: TextField(
                   controller: _priceController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
                   decoration: InputDecoration(
-                    labelText: 'Price (₹)',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                    prefixIcon: const Icon(Icons.attach_money),
+                    labelText: 'Price',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    prefixIcon: const Icon(Icons.currency_rupee),
                   ),
                 ),
               ),
@@ -130,7 +138,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: 'Stock',
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12)),
                     prefixIcon: const Icon(Icons.inventory),
                   ),
                 ),
@@ -142,7 +151,8 @@ class _AddEditProductScreenState extends ConsumerState<AddEditProductScreen> {
             onPressed: _isLoading ? null : _submitProduct,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: _isLoading
                 ? const CircularProgressIndicator()

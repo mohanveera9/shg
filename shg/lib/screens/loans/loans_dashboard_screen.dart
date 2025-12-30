@@ -89,7 +89,7 @@ class LoansDashboardScreen extends ConsumerWidget {
                     const SizedBox(height: 24),
                     Text('Recent Loans', style: Theme.of(context).textTheme.titleLarge),
                     const SizedBox(height: 12),
-                    ...loans.take(5).map((loan) => _buildLoanCard(context, loan)).toList(),
+                    ...loans.take(5).map((loan) => _buildLoanCard(context, loan)),
                   ],
                   );
                 },

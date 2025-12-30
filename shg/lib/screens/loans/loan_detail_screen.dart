@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
-import '../../services/api_service.dart';
 
 class LoanDetailScreen extends ConsumerStatefulWidget {
   final String loanId;

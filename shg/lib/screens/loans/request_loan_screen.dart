@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
-import '../../services/api_service.dart';
 
 class RequestLoanScreen extends ConsumerStatefulWidget {
   const RequestLoanScreen({super.key});
@@ -25,7 +24,9 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
   }
 
   Future<void> _submitLoanRequest() async {
-    if (_amountController.text.isEmpty || _purposeController.text.isEmpty || _tenureController.text.isEmpty) {
+    if (_amountController.text.isEmpty ||
+        _purposeController.text.isEmpty ||
+        _tenureController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
@@ -52,7 +53,8 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
       if (response['success'] == true) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Loan request submitted successfully')),
+            const SnackBar(
+                content: Text('Loan request submitted successfully')),
           );
           Navigator.pop(context);
         }
@@ -84,9 +86,10 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(
-              labelText: 'Loan Amount (₹)',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              prefixIcon: const Icon(Icons.attach_money),
+              labelText: 'Loan Amount',
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              prefixIcon: const Icon(Icons.currency_rupee),
             ),
           ),
           const SizedBox(height: 16),
@@ -95,7 +98,8 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
             maxLines: 3,
             decoration: InputDecoration(
               labelText: 'Purpose',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.description),
             ),
           ),
@@ -105,7 +109,8 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: 'Tenure (Months)',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
               prefixIcon: const Icon(Icons.calendar_month),
             ),
           ),
@@ -114,7 +119,8 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
             onPressed: _isLoading ? null : _submitLoanRequest,
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12)),
             ),
             child: _isLoading
                 ? const CircularProgressIndicator()

@@ -83,7 +83,7 @@ class OutstandingLoansScreen extends ConsumerWidget {
                           ),
                         ),
                       ),
-                    )).toList(),
+                    )),
                   ],
                 );
               },

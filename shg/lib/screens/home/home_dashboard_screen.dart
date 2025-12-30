@@ -9,7 +9,8 @@ class HomeDashboardScreen extends ConsumerStatefulWidget {
   const HomeDashboardScreen({super.key});
 
   @override
-  ConsumerState<HomeDashboardScreen> createState() => _HomeDashboardScreenState();
+  ConsumerState<HomeDashboardScreen> createState() =>
+      _HomeDashboardScreenState();
 }
 
 class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
@@ -18,7 +19,7 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     final l10n = AppLocalizations.of(context)!;
     final groupState = ref.watch(groupProvider);
     final authState = ref.watch(authProvider);
-    
+
     if (groupState.currentGroup == null) {
       print('No current group selected');
       return Scaffold(
@@ -27,7 +28,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
       );
     }
 
-    final dashboardAsync = ref.watch(dashboardProvider(groupState.currentGroup!.id));
+    final dashboardAsync =
+        ref.watch(dashboardProvider(groupState.currentGroup!.id));
 
     return Scaffold(
       appBar: AppBar(
@@ -61,7 +63,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    ref.invalidate(dashboardProvider(groupState.currentGroup!.id));
+                    ref.invalidate(
+                        dashboardProvider(groupState.currentGroup!.id));
                   },
                   child: Text(l10n.try_again),
                 ),
@@ -73,7 +76,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildDrawer(BuildContext context, AppLocalizations l10n, AuthState authState) {
+  Widget _buildDrawer(
+      BuildContext context, AppLocalizations l10n, AuthState authState) {
     return Drawer(
       child: Column(
         children: [
@@ -158,7 +162,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildDashboard(BuildContext context, AppLocalizations l10n, Map<String, dynamic> data) {
+  Widget _buildDashboard(
+      BuildContext context, AppLocalizations l10n, Map<String, dynamic> data) {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16.0),
@@ -168,41 +173,41 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
           Text(
             l10n.dashboard,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
+            crossAxisSpacing: 12, // Increased spacing for better look
+            mainAxisSpacing: 12,
             childAspectRatio: 1.1,
             children: [
               _buildSummaryCard(
                 l10n.cash_in_hand,
                 '₹${(data['cashInHand'] ?? 0).toStringAsFixed(2)}',
-                Icons.money,
-                AppTheme.lightGreen,
+                Icons.account_balance_wallet,
+                const Color(0xFF00B4DB), // Vibrant Cyan/Blue
               ),
               _buildSummaryCard(
                 l10n.group_savings,
                 '₹${(data['groupSavings'] ?? 0).toStringAsFixed(2)}',
                 Icons.savings,
-                AppTheme.lightBlue,
+                const Color(0xFFF09819), // Vibrant Orange
               ),
               _buildSummaryCard(
                 l10n.due_loans,
                 '${data['dueLoans'] ?? 0}',
-                Icons.warning,
-                AppTheme.lightOrange,
+                Icons.warning_rounded,
+                const Color(0xFFED213A), // Vibrant Red
               ),
               _buildSummaryCard(
                 l10n.todays_tasks,
                 '${data['todayTasks'] ?? 0}',
-                Icons.task,
-                AppTheme.lightPurple,
+                Icons.assignment_turned_in,
+                const Color(0xFF56AB2F), // Vibrant Green
               ),
             ],
           ),
@@ -210,19 +215,24 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
           Text(
             l10n.quick_actions,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 16),
           Wrap(
             spacing: 12,
             runSpacing: 12,
             children: [
-              _buildActionChip(context, l10n.bookkeeping, Icons.book, AppRoutes.transactionsList),
-              _buildActionChip(context, l10n.loans, Icons.money, AppRoutes.loansDashboard),
-              _buildActionChip(context, l10n.products, Icons.shopping_bag, AppRoutes.productsList),
-              _buildActionChip(context, l10n.orders, Icons.shopping_cart, AppRoutes.ordersList),
-              _buildActionChip(context, l10n.reports, Icons.bar_chart, AppRoutes.reportsDashboard),
+              _buildActionChip(context, l10n.bookkeeping, Icons.book,
+                  AppRoutes.transactionsList),
+              _buildActionChip(
+                  context, l10n.loans, Icons.money, AppRoutes.loansDashboard),
+              _buildActionChip(context, l10n.products, Icons.shopping_bag,
+                  AppRoutes.productsList),
+              _buildActionChip(context, l10n.orders, Icons.shopping_cart,
+                  AppRoutes.ordersList),
+              _buildActionChip(context, l10n.reports, Icons.bar_chart,
+                  AppRoutes.reportsDashboard),
             ],
           ),
         ],
@@ -230,33 +240,85 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildSummaryCard(String title, String value, IconData icon, Color color) {
-    return Card(
-      color: color,
-      elevation: 3,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+  Widget _buildSummaryCard(
+      String title, String value, IconData icon, Color color) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.3),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        elevation: 0, // Elevation is handled by the container shadow
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Stack(
           children: [
-            Icon(icon, size:30, color: Colors.white),
-            const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            // Background Gradient
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [color, color.withOpacity(0.8)],
+                ),
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                color: Colors.white,
-                fontWeight: FontWeight.w500,
+            // Large Background Icon (Decorative)
+            Positioned(
+              right: -10,
+              bottom: -10,
+              child: Icon(
+                icon,
+                size: 80,
+                color: Colors.white.withOpacity(0.15),
+              ),
+            ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(icon, size: 24, color: Colors.white),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: Colors.white.withOpacity(0.9),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -265,7 +327,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildActionChip(BuildContext context, String label, IconData icon, String route) {
+  Widget _buildActionChip(
+      BuildContext context, String label, IconData icon, String route) {
     return ActionChip(
       avatar: Icon(icon, size: 20, color: AppTheme.primaryGreen),
       label: Text(label),

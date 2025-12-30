@@ -16,7 +16,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
   final _amountController = TextEditingController();
   final _categoryController = TextEditingController();
   final _notesController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  final DateTime _selectedDate = DateTime.now();
   bool _isLoading = false;
 
   @override
@@ -82,7 +82,7 @@ class _AddTransactionScreenState extends ConsumerState<AddTransactionScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     DropdownButtonFormField<String>(
-                      value: _type,
+                      initialValue: _type,
                       decoration: InputDecoration(labelText: l10n.type),
                       items: [
                         DropdownMenuItem(value: 'INCOME', child: Text(l10n.income)),

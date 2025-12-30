@@ -80,7 +80,7 @@ class _LanguageSelectionScreenState extends ConsumerState<LanguageSelectionScree
                     ),
                   ),
                 );
-              }).toList(),
+              }),
               const SizedBox(height: 32),
               SizedBox(
                 width: double.infinity,
