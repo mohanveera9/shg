@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
+import '../../config/routes.dart';
 
 class PendingApprovalsScreen extends ConsumerWidget {
   const PendingApprovalsScreen({super.key});
@@ -99,7 +100,7 @@ class PendingApprovalsScreen extends ConsumerWidget {
                                 Expanded(
                                   child: OutlinedButton(
                                     onPressed: () =>
-                                        Navigator.of(context).pushNamed('/approve-loan', arguments: loan.id),
+                                        Navigator.of(context).pushNamed(AppRoutes.approveLoan, arguments: loan.id),
                                     style: OutlinedButton.styleFrom(
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                     ),
@@ -110,7 +111,7 @@ class PendingApprovalsScreen extends ConsumerWidget {
                                 Expanded(
                                   child: ElevatedButton(
                                     onPressed: () =>
-                                        Navigator.of(context).pushNamed('/approve-loan', arguments: loan.id),
+                                        Navigator.of(context).pushNamed(AppRoutes.approveLoan, arguments: loan.id),
                                     style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                       backgroundColor: AppTheme.primaryGreen,

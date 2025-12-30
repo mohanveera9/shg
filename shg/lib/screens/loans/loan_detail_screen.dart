@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
+import '../../config/routes.dart';
 
 class LoanDetailScreen extends ConsumerStatefulWidget {
   final String loanId;
@@ -116,8 +117,8 @@ class _LoanDetailScreenState extends ConsumerState<LoanDetailScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: loan['status'] == 'APPROVED'
-                        ? () => Navigator.of(context).pushNamed('/disburse-loan', arguments: widget.loanId)
-                        : () => Navigator.of(context).pushNamed('/repay-emi', arguments: widget.loanId),
+                        ? () => Navigator.of(context).pushNamed(AppRoutes.disburseLoan, arguments: widget.loanId)
+                        : () => Navigator.of(context).pushNamed(AppRoutes.repayEmi, arguments: widget.loanId),
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(vertical: 16),

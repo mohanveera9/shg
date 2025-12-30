@@ -219,20 +219,49 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
                 ),
           ),
           const SizedBox(height: 16),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
+          GridView.count(
+            crossAxisCount: 2,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 1.3,
             children: [
-              _buildActionChip(context, l10n.bookkeeping, Icons.book,
-                  AppRoutes.transactionsList),
-              _buildActionChip(
-                  context, l10n.loans, Icons.money, AppRoutes.loansDashboard),
-              _buildActionChip(context, l10n.products, Icons.shopping_bag,
-                  AppRoutes.productsList),
-              _buildActionChip(context, l10n.orders, Icons.shopping_cart,
-                  AppRoutes.ordersList),
-              _buildActionChip(context, l10n.reports, Icons.bar_chart,
-                  AppRoutes.reportsDashboard),
+              _buildActionCard(
+                context,
+                l10n.bookkeeping,
+                Icons.book,
+                AppRoutes.transactionsList,
+                const Color(0xFF6DBEA2), // Primary Green
+              ),
+              _buildActionCard(
+                context,
+                l10n.loans,
+                Icons.money,
+                AppRoutes.loansDashboard,
+                const Color(0xFF4A90E2), // Blue
+              ),
+              _buildActionCard(
+                context,
+                l10n.products,
+                Icons.shopping_bag,
+                AppRoutes.productsList,
+                const Color(0xFFF5A623), // Orange
+              ),
+              _buildActionCard(
+                context,
+                l10n.orders,
+                Icons.shopping_cart,
+                AppRoutes.ordersList,
+                const Color(0xFF7B68EE), // Purple
+              ),
+              _buildActionCard(
+                context,
+                l10n.reports,
+                Icons.bar_chart,
+                AppRoutes.reportsDashboard,
+                const Color(0xFF50C878), // Green
+              ),
             ],
           ),
         ],
@@ -327,17 +356,53 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildActionChip(
-      BuildContext context, String label, IconData icon, String route) {
-    return ActionChip(
-      avatar: Icon(icon, size: 20, color: AppTheme.primaryGreen),
-      label: Text(label),
-      backgroundColor: Colors.white,
-      elevation: 2,
-      shadowColor: Colors.grey.withOpacity(0.5),
-      onPressed: () {
+  Widget _buildActionCard(
+      BuildContext context, String label, IconData icon, String route, Color color) {
+    return InkWell(
+      onTap: () {
         Navigator.pushNamed(context, route);
       },
+      borderRadius: BorderRadius.circular(16),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.2),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                icon,
+                size: 32,
+                color: color,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[800],
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
