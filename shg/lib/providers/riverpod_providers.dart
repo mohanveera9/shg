@@ -230,6 +230,27 @@ class GroupNotifier extends StateNotifier<GroupState> {
       return false;
     }
   }
+
+  Future<bool> addMemberToGroup(String groupId, String memberPhone) async {
+    state = state.copyWith(isLoading: true);
+    final response = await apiService.post(
+      '/groups/$groupId/add-member',
+      {'memberPhone': memberPhone},
+      needsAuth: true,
+    );
+    
+    if (response['success'] == true) {
+      await fetchUserGroups();
+      state = state.copyWith(isLoading: false);
+      return true;
+    } else {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: response['message'],
+      );
+      return false;
+    }
+  }
 }
 
 final groupProvider = StateNotifierProvider<GroupNotifier, GroupState>((ref) {

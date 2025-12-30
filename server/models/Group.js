@@ -54,6 +54,10 @@ const groupSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  expectedMemberCount: {
+    type: Number,
+    default: null,
+  },
   cashInHand: {
     type: Number,
     default: 0,

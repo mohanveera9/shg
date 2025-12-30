@@ -6,6 +6,7 @@ class User {
   final String language;
   final List<String> groups;
   final String? profilePhotoUrl;
+  final String userType; // SOLO_ENTREPRENEUR or GROUP_MEMBER
 
   User({
     required this.id,
@@ -15,6 +16,7 @@ class User {
     required this.language,
     required this.groups,
     this.profilePhotoUrl,
+    this.userType = 'GROUP_MEMBER',
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -26,6 +28,7 @@ class User {
       language: json['language'] ?? 'te',
       groups: List<String>.from(json['groups'] ?? []),
       profilePhotoUrl: json['profilePhotoUrl'],
+      userType: json['userType'] ?? 'GROUP_MEMBER',
     );
   }
 

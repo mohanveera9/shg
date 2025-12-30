@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     enum: ['MEMBER', 'TREASURER', 'PRESIDENT', 'FIELD_OFFICER', 'ADMIN'],
     default: 'MEMBER',
   },
+  userType: {
+    type: String,
+    enum: ['SOLO_ENTREPRENEUR', 'GROUP_MEMBER'],
+    default: 'GROUP_MEMBER',
+  },
   groups: [{
     groupId: mongoose.Schema.Types.ObjectId,
     role: {

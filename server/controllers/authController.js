@@ -85,10 +85,12 @@ const verifyOTP = async (req, res) => {
     let user = await User.findOne({ phone });
 
     if (!user) {
+      // Default to GROUP_MEMBER, can be updated later
       user = new User({
         phone,
         name: '',
         role: 'MEMBER',
+        userType: 'GROUP_MEMBER',
       });
       await user.save();
     }
@@ -110,6 +112,7 @@ const verifyOTP = async (req, res) => {
         email: user.email,
         profilePhoto: user.profilePhoto,
         role: user.role,
+        userType: user.userType,
       },
     });
   } catch (error) {

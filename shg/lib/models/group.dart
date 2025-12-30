@@ -13,6 +13,7 @@ class Group {
   final double cashInHand;
   final double totalSavings;
   final String? userRole;
+  final int? expectedMemberCount;
 
   Group({
     required this.id,
@@ -29,6 +30,7 @@ class Group {
     required this.cashInHand,
     required this.totalSavings,
     this.userRole,
+    this.expectedMemberCount,
   });
 
   factory Group.fromJson(Map<String, dynamic> json) {
@@ -49,6 +51,7 @@ class Group {
       cashInHand: (json['cashInHand'] ?? 0).toDouble(),
       totalSavings: (json['totalSavings'] ?? 0).toDouble(),
       userRole: json['userRole'],
+      expectedMemberCount: json['expectedMemberCount'],
     );
   }
 }
@@ -58,22 +61,28 @@ class GroupMember {
   final String role;
   final DateTime joinedAt;
   final String status;
+  final String? userName;
+  final String? userPhone;
 
   GroupMember({
     required this.userId,
     required this.role,
     required this.joinedAt,
     required this.status,
+    this.userName,
+    this.userPhone,
   });
 
   factory GroupMember.fromJson(Map<String, dynamic> json) {
     return GroupMember(
-      userId: json['userId'] ?? '',
+      userId: json['userId']?.toString() ?? '',
       role: json['role'] ?? 'MEMBER',
       joinedAt: json['joinedAt'] != null 
           ? DateTime.parse(json['joinedAt']) 
           : DateTime.now(),
       status: json['status'] ?? 'ACTIVE',
+      userName: json['userName'],
+      userPhone: json['userPhone'],
     );
   }
 }

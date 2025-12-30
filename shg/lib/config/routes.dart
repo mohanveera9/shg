@@ -4,11 +4,14 @@ import '../screens/onboarding/language_selection_screen.dart';
 import '../screens/onboarding/permissions_screen.dart';
 import '../screens/auth/phone_input_screen.dart';
 import '../screens/auth/otp_verification_screen.dart';
+import '../screens/auth/complete_profile_screen.dart';
 import '../screens/home/home_dashboard_screen.dart';
+import '../screens/home/solo_user_dashboard_screen.dart';
 import '../screens/home/group_selection_screen.dart';
 import '../screens/home/create_group_screen.dart';
 import '../screens/home/join_group_screen.dart';
 import '../screens/home/group_created_screen.dart';
+import '../screens/home/manage_members_screen.dart';
 import '../screens/bookkeeping/transactions_list_screen.dart';
 import '../screens/bookkeeping/add_transaction_screen.dart';
 import '../screens/loans/loans_dashboard_screen.dart';
@@ -39,10 +42,13 @@ class AppRoutes {
   static const String permissions = '/permissions';
   static const String phoneInput = '/phone-input';
   static const String otpVerification = '/otp-verification';
+  static const String completeProfile = '/complete-profile';
+  static const String soloDashboard = '/solo-dashboard';
   static const String groupSelection = '/group-selection';
   static const String createGroup = '/create-group';
   static const String joinGroup = '/join-group';
   static const String groupCreated = '/group-created';
+  static const String manageMembers = '/manage-members';
   static const String home = '/home';
   
   static const String transactionsList = '/transactions';
@@ -82,6 +88,8 @@ class AppRoutes {
       permissions: (context) => const PermissionsScreen(),
       phoneInput: (context) => const PhoneInputScreen(),
       otpVerification: (context) => const OtpVerificationScreen(),
+      completeProfile: (context) => const CompleteProfileScreen(),
+      soloDashboard: (context) => const SoloUserDashboardScreen(),
       groupSelection: (context) => const GroupSelectionScreen(),
       createGroup: (context) => const CreateGroupScreen(),
       joinGroup: (context) => const JoinGroupScreen(),
@@ -154,6 +162,11 @@ class AppRoutes {
         final orderId = settings.arguments as String;
         return MaterialPageRoute(
           builder: (context) => OrderDetailScreen(orderId: orderId),
+        );
+      case manageMembers:
+        final groupId = settings.arguments as String;
+        return MaterialPageRoute(
+          builder: (context) => ManageMembersScreen(groupId: groupId),
         );
       default:
         return null;

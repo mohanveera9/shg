@@ -13,6 +13,7 @@ router.get('/profile', authenticate, (req, res) => {
       email: req.user.email,
       profilePhoto: req.user.profilePhoto,
       role: req.user.role,
+      userType: req.user.userType,
     },
   });
 });

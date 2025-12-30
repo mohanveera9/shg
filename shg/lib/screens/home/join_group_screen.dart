@@ -38,6 +38,19 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
   }
 
   Future<void> _joinGroup(String code) async {
+    final groupState = ref.read(groupProvider);
+    
+    // Check if user already has a group
+    if (groupState.groups.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('You can only be a member of one group. Please leave your current group first.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    
     final groupNotifier = ref.read(groupProvider.notifier);
 
     final success = await groupNotifier.joinGroup(code.toUpperCase());
@@ -45,7 +58,7 @@ class _JoinGroupScreenState extends ConsumerState<JoinGroupScreen> {
     if (mounted) {
       if (success) {
         Navigator.of(context).pushNamedAndRemoveUntil(
-          AppRoutes.home,
+          AppRoutes.soloDashboard,
           (route) => false,
         );
       } else {

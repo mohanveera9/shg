@@ -17,6 +17,7 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
   final _villageController = TextEditingController();
   final _blockController = TextEditingController();
   final _districtController = TextEditingController();
+  final _memberCountController = TextEditingController();
   bool _researchConsent = false;
 
   @override
@@ -25,11 +26,25 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
     _villageController.dispose();
     _blockController.dispose();
     _districtController.dispose();
+    _memberCountController.dispose();
     super.dispose();
   }
 
   Future<void> _createGroup() async {
     if (_formKey.currentState!.validate()) {
+      final groupState = ref.read(groupProvider);
+      
+      // Check if user already has a group
+      if (groupState.groups.isNotEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('You can only be a member of one group. Please leave your current group first.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+      
       final groupNotifier = ref.read(groupProvider.notifier);
 
       final createdGroup = await groupNotifier.createGroup({
@@ -38,6 +53,9 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
         'block': _blockController.text,
         'district': _districtController.text,
         'researchConsent': _researchConsent,
+        'expectedMemberCount': _memberCountController.text.isNotEmpty 
+            ? int.tryParse(_memberCountController.text) 
+            : null,
       });
 
       if (mounted) {
@@ -122,6 +140,26 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
                   hintText: 'Enter district name',
                   prefixIcon: const Icon(Icons.place),
                 ),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _memberCountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Expected Member Count',
+                  hintText: 'Enter expected number of members (optional)',
+                  prefixIcon: const Icon(Icons.people),
+                  helperText: 'You can add members anytime after creating the group',
+                ),
+                validator: (value) {
+                  if (value != null && value.isNotEmpty) {
+                    final count = int.tryParse(value);
+                    if (count == null || count < 1) {
+                      return 'Please enter a valid number';
+                    }
+                  }
+                  return null;
+                },
               ),
               const SizedBox(height: 24),
               CheckboxListTile(

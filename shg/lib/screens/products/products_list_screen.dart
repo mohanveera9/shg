@@ -8,7 +8,8 @@ class ProductsListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final group = ref.watch(groupProvider).currentGroup;
+    final groupState = ref.watch(groupProvider);
+    final group = groupState.currentGroup ?? (groupState.groups.isNotEmpty ? groupState.groups.first : null);
     final productsAsync = group != null ? ref.watch(productsProvider(group.id)) : null;
 
     return Scaffold(
@@ -17,7 +18,33 @@ class ProductsListScreen extends ConsumerWidget {
         elevation: 0,
       ),
       body: productsAsync == null
-          ? const Center(child: Text('No group selected'))
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.group_add, size: 64, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'No Group Found',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Please create or join a group to manage products',
+                    style: TextStyle(color: Colors.grey[600]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/create-group');
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Create Group'),
+                  ),
+                ],
+              ),
+            )
           : RefreshIndicator(
               onRefresh: () async {
                 if (group != null) {

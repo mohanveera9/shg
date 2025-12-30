@@ -39,21 +39,26 @@ class _OtpVerificationScreenState extends ConsumerState<OtpVerificationScreen> {
       
       if (mounted) {
         if (success) {
+          final authState = ref.read(authProvider);
+          final user = authState.user;
+          
+          // Check if user needs to complete profile (name is empty)
+          if (user?.name == null || user!.name.isEmpty) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.completeProfile,
+              (route) => false,
+            );
+            return;
+          }
+          
           await ref.read(groupProvider.notifier).fetchUserGroups();
           
           if (mounted) {
-            final groups = ref.read(groupProvider).groups;
-            if (groups.isEmpty) {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                AppRoutes.groupSelection,
-                (route) => false,
-              );
-            } else {
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                AppRoutes.home,
-                (route) => false,
-              );
-            }
+            // Always go to solo dashboard first
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AppRoutes.soloDashboard,
+              (route) => false,
+            );
           }
         } else {
           final errorMessage = ref.read(authProvider).errorMessage;

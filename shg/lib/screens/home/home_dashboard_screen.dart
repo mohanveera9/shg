@@ -35,6 +35,18 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
       appBar: AppBar(
         title: Text(groupState.currentGroup?.name ?? l10n.app_name),
         actions: [
+          if (groupState.currentGroup != null)
+            IconButton(
+              icon: const Icon(Icons.people),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.manageMembers,
+                  arguments: groupState.currentGroup!.id,
+                );
+              },
+              tooltip: 'Manage Members',
+            ),
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
@@ -109,22 +121,6 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, AppRoutes.loansDashboard);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.shopping_bag),
-            title: Text(l10n.products),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, AppRoutes.productsList);
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.shopping_cart),
-            title: Text(l10n.orders),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, AppRoutes.ordersList);
             },
           ),
           ListTile(
@@ -240,20 +236,6 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
                 Icons.money,
                 AppRoutes.loansDashboard,
                 const Color(0xFF4A90E2), // Blue
-              ),
-              _buildActionCard(
-                context,
-                l10n.products,
-                Icons.shopping_bag,
-                AppRoutes.productsList,
-                const Color(0xFFF5A623), // Orange
-              ),
-              _buildActionCard(
-                context,
-                l10n.orders,
-                Icons.shopping_cart,
-                AppRoutes.ordersList,
-                const Color(0xFF7B68EE), // Purple
               ),
               _buildActionCard(
                 context,

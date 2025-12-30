@@ -165,7 +165,7 @@ class GroupCreatedScreen extends ConsumerWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pushNamedAndRemoveUntil(
-                      AppRoutes.home,
+                      AppRoutes.soloDashboard,
                       (route) => false,
                     );
                   },

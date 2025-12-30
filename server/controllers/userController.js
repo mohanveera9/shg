@@ -31,6 +31,7 @@ const updateProfile = async (req, res) => {
         email: user.email,
         profilePhoto: user.profilePhoto,
         role: user.role,
+        userType: user.userType,
       },
     });
   } catch (error) {

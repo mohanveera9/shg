@@ -30,18 +30,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     if (!mounted) return;
 
     if (authState.isAuthenticated) {
+      // Check if user needs to complete profile
+      if (authState.user?.name == null || authState.user!.name.isEmpty) {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.completeProfile);
+        return;
+      }
+      
       final groupNotifier = ref.read(groupProvider.notifier);
       await groupNotifier.fetchUserGroups();
       
-      final groupState = ref.read(groupProvider);
-      
       if (!mounted) return;
       
-      if (groupState.groups.isEmpty) {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.groupSelection);
-      } else {
-        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
-      }
+      // Always navigate to solo dashboard first
+      Navigator.of(context).pushReplacementNamed(AppRoutes.soloDashboard);
     } else {
       Navigator.of(context).pushReplacementNamed(AppRoutes.languageSelection);
     }

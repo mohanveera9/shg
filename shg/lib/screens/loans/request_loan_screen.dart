@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shg_app/l10n/app_localizations.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/theme.dart';
+import '../../config/routes.dart';
 
 class RequestLoanScreen extends ConsumerStatefulWidget {
   const RequestLoanScreen({super.key});
@@ -33,7 +34,9 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
 
     try {
       final group = ref.read(groupProvider).currentGroup;
-      if (group == null) throw Exception('No group selected');
+      if (group == null) {
+        throw Exception('You must join a group first to request a loan. Please join a group from the dashboard.');
+      }
 
       final apiService = ref.read(apiServiceProvider);
       final response = await apiService.post(
@@ -78,13 +81,59 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final groupState = ref.watch(groupProvider);
+    final hasGroup = groupState.currentGroup != null;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.request_loan),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
+      body: !hasGroup
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.group_add,
+                      size: 64,
+                      color: Colors.grey[400],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Join a Group First',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'You must join a group before requesting a loan. Please join a group from the dashboard.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pushNamed(context, AppRoutes.groupSelection);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryGreen,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 16,
+                        ),
+                      ),
+                      child: const Text('Go to Groups'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
