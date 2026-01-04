@@ -158,7 +158,7 @@ class _RequestLoanScreenState extends ConsumerState<RequestLoanScreen> {
                               color: AppTheme.primaryGreen.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Icons.info_outline,
                               color: AppTheme.primaryGreen,
                             ),

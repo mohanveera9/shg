@@ -62,7 +62,7 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                     child: Row(
                       children: [
                         FilterChip(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           label: const Text('All'),
                           showCheckmark: false,
                           selected: _selectedFilter == null,
@@ -74,7 +74,7 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                         ),
                         const SizedBox(width: 8),
                         FilterChip(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           label: Text(l10n.income),
                           showCheckmark: false,
                           selected: _selectedFilter == 'INCOME',
@@ -86,7 +86,7 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                         ),
                         const SizedBox(width: 8),
                         FilterChip(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           label: Text(l10n.expense),
                           showCheckmark: false,
                           selected: _selectedFilter == 'EXPENSE',
@@ -98,7 +98,7 @@ class _TransactionsListScreenState extends ConsumerState<TransactionsListScreen>
                         ),
                         const SizedBox(width: 8),
                         FilterChip(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
                           label: Text(l10n.savings),
                           showCheckmark: false,
                           selected: _selectedFilter == 'SAVINGS',

@@ -145,10 +145,10 @@ class _CreateGroupScreenState extends ConsumerState<CreateGroupScreen> {
               TextFormField(
                 controller: _memberCountController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Expected Member Count',
                   hintText: 'Enter expected number of members (optional)',
-                  prefixIcon: const Icon(Icons.people),
+                  prefixIcon: Icon(Icons.people),
                   helperText: 'You can add members anytime after creating the group',
                 ),
                 validator: (value) {

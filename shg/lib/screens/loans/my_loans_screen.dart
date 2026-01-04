@@ -155,7 +155,7 @@ class MyLoansScreen extends ConsumerWidget {
                         const SizedBox(height: 4),
                         Text(
                           '₹${loan.totalPaid.toStringAsFixed(0)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                             color: AppTheme.primaryGreen,

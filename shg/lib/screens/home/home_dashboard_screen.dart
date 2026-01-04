@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shg_app/l10n/app_localizations.dart';
+import 'package:shg_app/screens/home/solo_user_dashboard_screen.dart';
 import '../../providers/riverpod_providers.dart';
 import '../../config/app_theme.dart';
 import '../../config/routes.dart';
@@ -50,7 +51,10 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.profile);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SoloUserDashboardScreen()));
             },
           ),
         ],
@@ -338,8 +342,8 @@ class _HomeDashboardScreenState extends ConsumerState<HomeDashboardScreen> {
     );
   }
 
-  Widget _buildActionCard(
-      BuildContext context, String label, IconData icon, String route, Color color) {
+  Widget _buildActionCard(BuildContext context, String label, IconData icon,
+      String route, Color color) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, route);
